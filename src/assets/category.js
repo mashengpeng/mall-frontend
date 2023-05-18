@@ -1,27 +1,4 @@
-<template>
-  <div class="page">
-    <el-tree
-      :data="category"
-      :props="defaultProps"
-      icon="asdf"
-      @node-click="handleNodeClick"
-    />
-    <div>msp</div>
-  </div>
-</template>
-
-<script lang="ts" setup>
-import { ref } from "vue";
-
-interface Tree {
-  label: string;
-  children?: Tree[];
-}
-
-const handleNodeClick = (data: Tree) => {
-  console.log(data);
-};
-const category = ref([
+export default [
   {
     catId: 1,
     name: "图书、音像、电子书刊",
@@ -16027,15 +16004,4 @@ const category = ref([
       },
     ],
   },
-]);
-
-const defaultProps = {
-  children: "children",
-  label: "name",
-};
-</script>
-
-<style>
-.page {
-}
-</style>
+];

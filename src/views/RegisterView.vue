@@ -26,14 +26,16 @@
         <a-input-password v-model:value="formState.password" />
       </a-form-item>
 
-      <a-form-item :wrapper-col="{ offset: 8, span: 16 }" name="remember">
-        <a-checkbox v-model:checked="formState.remember"
-          >Remember me
-        </a-checkbox>
+      <a-form-item
+        :rules="[{ required: true, message: 'Please input your password!' }]"
+        label="再次输入密码"
+        name="password"
+      >
+        <a-input-password v-model:value="formState.password" />
       </a-form-item>
-      <router-link to="/register">没有账号?去注册</router-link>
+      <router-link to="/login">已有账号?去登录</router-link>
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button html-type="submit" type="primary">登录</a-button>
+        <a-button html-type="submit" type="primary">注册</a-button>
       </a-form-item>
     </a-form>
   </a-card>
