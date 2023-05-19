@@ -1,81 +1,37 @@
 <template>
-  <div class="container">
-    <el-tree
-      :data="category"
-      :props="defaultProps"
-      class="tree"
-      @node-click="handleNodeClick"
-    />
-    <div class="search">
-      <el-input
-        v-model="input"
-        class="input"
-        placeholder="搜索你想要的商品吧"
-      />
-      <el-button class="button" type="primary" @click="onSearch"
-        >搜索
-      </el-button>
-    </div>
-  </div>
+  <el-container>
+    <el-header>
+      <MallHeader></MallHeader>
+    </el-header>
+    <el-main>
+      <router-view></router-view>
+    </el-main>
+  </el-container>
 </template>
 
-<script lang="ts" setup>
-import { ref } from "vue";
-import data from "@/assets/category.js";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
-
-interface Tree {
-  label: string;
-  children?: Tree[];
-}
-
-const handleNodeClick = (data: Tree) => {
-  console.log(data);
-};
-const category = ref(data);
-
-const input = ref();
-
-const defaultProps = {
-  children: "children",
-  label: "name",
-};
-
-const onSearch = () => {
-  router.push("/list");
-};
+<script setup>
+import MallHeader from "@/components/MallHeader.vue";
 </script>
 
 <style>
-.tree {
-  width: auto;
-  font-size: 16px;
-  float: left;
+* {
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<style scoped>
+html,
+.el-container {
+  height: 100vh;
+  width: 100%;
 }
 
-.search {
-  margin-top: 250px;
-  margin-left: 500px;
-  overflow: hidden;
-  float: left;
+.el-header {
+  padding: 0 200px;
 }
 
-.input {
-  float: left;
-  width: 500px;
-  margin-right: 20px;
-}
-
-.button {
-  float: left;
-  //height: 50px; //width: 100px; //margin-top: 50px;
-}
-
-.container {
-  padding-top: 150px;
-  overflow: auto;
-  //display: flex; //justify-content: left;
+.el-main {
+  padding: 50px 200px;
 }
 </style>

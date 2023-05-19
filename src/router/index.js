@@ -3,12 +3,12 @@ import { createRouter, createWebHashHistory } from "vue-router";
 const routes = [
   {
     path: "/",
-    component: () => import("../components/MallHeader.vue"),
+    component: () => import("@/views/IndexView.vue"),
     children: [
       {
         path: "",
-        name: "index",
-        component: () => import("@/views/IndexView.vue"),
+        name: "home",
+        component: () => import("@/views/HomeView.vue"),
       },
       {
         path: "list",
@@ -33,29 +33,6 @@ const routes = [
     ],
   },
 ];
-
-// const routes = [
-//   {
-//     path: "/",
-//     name: "index",
-//     component: () => import("@/views/IndexView.vue"),
-//   },
-//   {
-//     path: "/tree",
-//     name: "Tree",
-//     component: () => import("@/views/RegisterView.vue"),
-//   },
-//   {
-//     path: "/login",
-//     name: "login",
-//     component: () => import("@/views/LoginView.vue"),
-//   },
-//   {
-//     path: "/test",
-//     name: "test",
-//     component: () => import("@/views/TestView.vue"),
-//   },
-// ];
 
 const router = createRouter({
   history: createWebHashHistory(),

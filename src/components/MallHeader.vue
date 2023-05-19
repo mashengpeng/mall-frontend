@@ -1,44 +1,38 @@
 <template>
-  <el-header class="head">
-    <el-row>
-      <el-col :offset="1" :span="2">
-        <router-link class="link" to="/">在线商城</router-link>
-      </el-col>
-      <el-col :offset="12" :span="2">
-        <router-link class="link" to="/login">登录</router-link>
-      </el-col>
-      <el-col :span="2">
-        <router-link class="link" to="/register">注册</router-link>
-      </el-col>
-      <el-col :span="2">
-        <router-link class="link" to="/test">test</router-link>
-      </el-col>
-    </el-row>
-  </el-header>
-  <router-view class="view"></router-view>
+  <el-menu
+    :ellipsis="false"
+    :router="true"
+    class="el-menu-demo"
+    mode="horizontal"
+  >
+    <el-menu-item index="/">首页</el-menu-item>
+    <div class="flex-grow" />
+    <el-menu-item index="/login">登录</el-menu-item>
+    <el-sub-menu>
+      <template #title>
+        <el-avatar :size="30" :src="circleUrl" />
+        &nbsp;&nbsp;&nbsp;我的
+      </template>
+
+      <el-menu-item index="/order">我的订单</el-menu-item>
+      <el-menu-item index="/cart">我的购物车</el-menu-item>
+    </el-sub-menu>
+  </el-menu>
 </template>
 
-<script setup></script>
+<script setup>
+import { reactive, toRefs } from "vue";
 
-<style>
-.head {
-  font-size: 20px;
-  border-bottom: 1px solid gray;
-}
+const state = reactive({
+  circleUrl:
+    "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+});
 
-.link {
-  display: block;
-  text-align: center;
-  border-radius: 50px;
-  height: 59px;
-  line-height: 59px;
-}
+const { circleUrl } = toRefs(state);
+</script>
 
-.link:hover {
-  background-color: ghostwhite;
-}
-
-.view {
-  margin: 0 200px;
+<style scoped>
+.flex-grow {
+  flex-grow: 1;
 }
 </style>
