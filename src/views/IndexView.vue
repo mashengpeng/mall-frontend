@@ -6,8 +6,16 @@
       class="tree"
       @node-click="handleNodeClick"
     />
-    <el-input v-model="input" class="input" placeholder="搜索你想要的商品吧" />
-    <el-button class="button" type="primary" @click="onSearch">搜索</el-button>
+    <div class="search">
+      <el-input
+        v-model="input"
+        class="input"
+        placeholder="搜索你想要的商品吧"
+      />
+      <el-button class="button" type="primary" @click="onSearch"
+        >搜索
+      </el-button>
+    </div>
   </div>
 </template>
 
@@ -42,26 +50,32 @@ const onSearch = () => {
 
 <style>
 .tree {
-  margin-top: 50px;
-  width: 300px;
+  width: auto;
+  font-size: 16px;
+  float: left;
+}
+
+.search {
+  margin-top: 250px;
+  margin-left: 500px;
+  overflow: hidden;
+  float: left;
 }
 
 .input {
-  height: 50px;
+  float: left;
   width: 500px;
-  margin-left: 200px;
-  margin-top: 50px;
-  margin-right: 50px;
+  margin-right: 20px;
 }
 
 .button {
-  height: 50px;
-  width: 100px;
-  margin-top: 50px;
+  float: left;
+  //height: 50px; //width: 100px; //margin-top: 50px;
 }
 
 .container {
-  display: flex;
-  justify-content: left;
+  padding-top: 150px;
+  overflow: auto;
+  //display: flex; //justify-content: left;
 }
 </style>
