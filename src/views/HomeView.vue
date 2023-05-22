@@ -13,7 +13,7 @@
     <el-main>
       <div class="search">
         <el-input
-          v-model="input"
+          v-model="input.keyword"
           class="input"
           placeholder="搜索你想要的商品吧"
         />
@@ -30,24 +30,26 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref } from "vue";
 import data from "@/assets/category.js";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-interface Tree {
-  label: string;
-  children?: Tree[];
-}
-
-const handleNodeClick = (data: Tree) => {
-  console.log(data);
+const handleNodeClick = (data) => {
+  if (data.catLevel === 3 || data.children === null) {
+    input.value.catalog3Id = data.catId;
+    console.log(input.value, data);
+    router.push({ name: "list", query: input.value });
+  }
 };
 const category = ref(data);
 
-const input = ref();
+const input = ref({
+  keyword: "",
+  catalog3Id: null,
+});
 
 const defaultProps = {
   children: "children",
@@ -55,7 +57,7 @@ const defaultProps = {
 };
 
 const onSearch = () => {
-  router.push("/list");
+  router.push({ name: "list", query: input.value });
 };
 </script>
 
