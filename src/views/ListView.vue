@@ -1,5 +1,9 @@
 <template>
-  <div class="base">
+  <el-empty
+    v-if="data.product.length === 0"
+    description="没有数据,请检查网络"
+  />
+  <div v-else class="base">
     <el-breadcrumb separator="/">
       <el-breadcrumb-item
         v-for="catalog in data.catalogs"
@@ -76,12 +80,9 @@ params.value = { ...route.query };
 const initPage = () => {
   myAxios.post("/search/list", null, { params: params.value }).then(
     (res) => {
-      console.log(res, 1);
       data.value = res.data;
     },
-    (error) => {
-      console.log(error);
-    }
+    () => {}
   );
 };
 
