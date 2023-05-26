@@ -14,8 +14,8 @@
         &nbsp;&nbsp;&nbsp;我的
       </template>
 
-      <el-menu-item index="/order">我的订单</el-menu-item>
-      <el-menu-item index="/cart">我的购物车</el-menu-item>
+      <el-menu-item index="/orderList">我的订单</el-menu-item>
+      <el-menu-item index="/cartList">我的购物车</el-menu-item>
     </el-sub-menu>
   </el-menu>
 </template>

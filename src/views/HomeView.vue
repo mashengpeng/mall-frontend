@@ -57,7 +57,7 @@ const defaultProps = {
 };
 
 const onSearch = () => {
-  router.push({ name: "list", query: input.value });
+  router.push({ name: "productList", query: input.value });
 };
 </script>
 

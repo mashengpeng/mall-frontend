@@ -26,9 +26,24 @@
 
 <script setup>
 import { ref } from "vue";
+import myAxios from "@/utils/httpRequest";
 
-const form = ref({ username: "", password: "" });
-console.log(form);
+const form = ref({ loginAccount: "", password: "" });
+
+const onSubmit = () => {
+  console.log(form);
+  myAxios({
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    data: form.value,
+    url: "/auth/login",
+  }).then(
+    (res) => {
+      console.log(res);
+    },
+    () => {}
+  );
+};
 </script>
 
 <style scoped>
