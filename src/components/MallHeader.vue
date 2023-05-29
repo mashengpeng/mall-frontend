@@ -7,21 +7,23 @@
   >
     <el-menu-item index="/">首页</el-menu-item>
     <div class="flex-grow" />
-    <el-menu-item index="/login">登录</el-menu-item>
-    <el-sub-menu>
+    <el-menu-item v-if="!userInfo" index="/login">登录</el-menu-item>
+    <el-sub-menu v-else>
       <template #title>
         <el-avatar :size="30" :src="circleUrl" />
-        &nbsp;&nbsp;&nbsp;我的
+        &nbsp;&nbsp;&nbsp;{{ userInfo.username }}
       </template>
 
       <el-menu-item index="/orderList">我的订单</el-menu-item>
       <el-menu-item index="/cartList">我的购物车</el-menu-item>
+      <el-menu-item index="/" @click="loginOut">退出登陆</el-menu-item>
     </el-sub-menu>
   </el-menu>
 </template>
 
 <script setup>
-import { reactive, toRefs } from "vue";
+import { reactive, ref, toRefs } from "vue";
+import { onBeforeRouteUpdate } from "vue-router";
 
 const state = reactive({
   circleUrl:
@@ -29,6 +31,15 @@ const state = reactive({
 });
 
 const { circleUrl } = toRefs(state);
+const userInfo = ref(null);
+
+const loginOut = () => {
+  sessionStorage.removeItem("userInfo");
+};
+onBeforeRouteUpdate(() => {
+  userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
+  console.log(userInfo);
+});
 </script>
 
 <style scoped>

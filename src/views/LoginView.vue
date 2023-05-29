@@ -5,7 +5,7 @@
 
       <el-form :model="form" label-width="120px">
         <el-form-item label="用户名:" label-width="80px">
-          <el-input v-model="form.username" placeholder="请输入用户名" />
+          <el-input v-model="form.loginAccount" placeholder="请输入用户名" />
         </el-form-item>
         <el-form-item label="密码:" label-width="80px">
           <el-input
@@ -27,8 +27,12 @@
 <script setup>
 import { ref } from "vue";
 import myAxios from "@/utils/httpRequest";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
 
-const form = ref({ loginAccount: "", password: "" });
+const router = useRouter();
+
+const form = ref({ loginAccount: "mashengpeng", password: "1qazzxcvbnm" });
 
 const onSubmit = () => {
   console.log(form);
@@ -39,7 +43,18 @@ const onSubmit = () => {
     url: "/auth/login",
   }).then(
     (res) => {
-      console.log(res);
+      if (res.msg === "success") {
+        ElMessage.success({
+          message: "登陆成功",
+        });
+        sessionStorage.setItem("userInfo", JSON.stringify(res.data));
+        console.log(router);
+        router.go(-1);
+      } else {
+        ElMessage.error({
+          message: res.msg,
+        });
+      }
     },
     () => {}
   );
