@@ -41,7 +41,7 @@ const handleNodeClick = (data) => {
   if (data.catLevel === 3 || data.children === null) {
     input.value.catalog3Id = data.catId;
     console.log(input.value, data);
-    router.push({ name: "list", query: input.value });
+    router.push({ name: "productList", query: input.value });
   }
 };
 const category = ref(data);

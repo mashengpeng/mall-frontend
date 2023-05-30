@@ -24,6 +24,9 @@
 <script setup>
 import { reactive, ref, toRefs } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
+import { useCookies } from "vue3-cookies";
+
+const { cookies } = useCookies();
 
 const state = reactive({
   circleUrl:
@@ -32,9 +35,10 @@ const state = reactive({
 
 const { circleUrl } = toRefs(state);
 const userInfo = ref(null);
-
+console.log(cookies.keys());
 const loginOut = () => {
   sessionStorage.removeItem("userInfo");
+  cookies.set("MALLSESSION", "");
 };
 onBeforeRouteUpdate(() => {
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));

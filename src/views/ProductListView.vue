@@ -80,6 +80,7 @@ params.value = { ...route.query };
 const initPage = () => {
   myAxios.post("/search/list", null, { params: params.value }).then(
     (res) => {
+      console.log(res);
       data.value = res.data;
     },
     () => {}

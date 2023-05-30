@@ -2,9 +2,9 @@ import axios from "axios";
 import { ElMessage } from "element-plus";
 
 const instance = axios.create({
+  withCredentials: true,
   baseURL: "http://localhost:88/api/",
   timeout: 10000,
-  withCredentials: true,
 });
 
 // 添加响应拦截器
