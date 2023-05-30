@@ -1,24 +1,129 @@
 <template>
   <el-empty v-if="!data"></el-empty>
   <div v-else class="base">
-    <el-image :fit="fit" :src="data.info.skuDefaultImg"></el-image>
-    {{ data }}
+    <el-image
+      :fit="fit"
+      :src="data.info.skuDefaultImg"
+      style="width: 500px; height: 500px"
+    ></el-image>
+    <h1>{{ data.info.skuTitle }}</h1>
+    <h2>{{ data.info.skuSubtitle }}</h2>
+    <h2>{{ "￥" + data.info.price }}</h2>
+    <el-carousel>
+      <el-carousel-item v-for="(image, index) in data.images" :key="index">
+        <el-image :src="data.info.skuDefaultImg"></el-image>
+      </el-carousel-item>
+    </el-carousel>
+
+    <el-form :model="form" label-width="80px">
+      <el-form-item
+        v-for="attr in data.saleAttr"
+        :key="attr.attrId"
+        :label="'选择' + attr.attrName"
+      >
+        <el-radio-group v-model="form[`attrId${attr.attrId}`]">
+          <el-radio-button
+            v-for="(item, index) in attr.attrValues"
+            :key="index"
+            :label="item.attrValue"
+            @click="attrSelect(attr, item.attrValue)"
+          ></el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item>
+        <el-input-number
+          v-model="form.number"
+          :max="9999"
+          :min="1"
+        ></el-input-number>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button type="primary" @click="addCart">添加购物车</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script setup>
-import { useRoute } from "vue-router";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import myAxios from "@/utils/httpRequest";
 import { ref } from "vue";
+import router from "@/router";
 
 const route = useRoute();
 const data = ref(null);
-myAxios.post(`/product/${route.params.skuId}`).then(
-  (res) => {
-    data.value = res.data;
-  },
-  () => {}
-);
+const form = ref({ number: 1 });
+const addCart = () => {
+  console.log(form);
+};
+const attrSelect = (a, b) => {
+  console.log(`attrId${a.attrId}`, b);
+  form.value[`attrId${a.attrId}`] = b;
+  console.log(form.value);
+  let setList = [];
+  //console.log(form);
+  for (let attr of data.value.saleAttr) {
+    let currentAttrValue = form.value[`attrId${attr.attrId}`];
+    //console.log(currentAttrValue);
+    for (let attrValuesKey of attr.attrValues) {
+      //console.log(attrValuesKey);
+      if (attrValuesKey.attrValue == currentAttrValue) {
+        let set = new Set();
+        for (let skuId of attrValuesKey.skuIds.split(",")) {
+          set.add(skuId);
+        }
+        setList.push(set);
+      }
+    }
+  }
+  const set = setList.reduce((acc, set) => {
+    return new Set([...acc].filter((x) => set.has(x)));
+  });
+  //console.log(`/productDetail/${set.values().next().value}`);
+  router.push({
+    path: `/productDetail/${set.values().next().value}`,
+  });
+};
+
+addCart();
+
+const loadData = () => {
+  //data.value = null;
+  form.value = { number: 1 };
+  //console.log(`/product/${route.params.skuId}`);
+  myAxios.post(`/product/${route.params.skuId}`).then(
+    (res) => {
+      data.value = res.data;
+      for (let attr of res.data.saleAttr) {
+        //console.log(attr);
+        for (let attrValuesKey of attr.attrValues) {
+          //console.log(attrValuesKey);
+          let flag = false;
+          for (let skuId of attrValuesKey.skuIds.split(",")) {
+            if (skuId == res.data.info.skuId) {
+              flag = true;
+              break;
+            }
+          }
+          if (flag) {
+            //console.log(attrValuesKey.attrValue);
+            form.value[`attrId${attr.attrId}`] = attrValuesKey.attrValue;
+            break;
+          }
+        }
+      }
+    },
+    () => {}
+  );
+};
+loadData();
+onBeforeRouteUpdate((to, from) => {
+  if (to.fullPath === from.fullPath) {
+    return;
+  }
+  loadData();
+});
 </script>
 
 <style scoped></style>
