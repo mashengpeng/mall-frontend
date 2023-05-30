@@ -2,7 +2,9 @@
   <div class="base">
     <el-aside>
       <el-scrollbar>
+        <el-skeleton v-if="category.length === 0" :rows="5" />
         <el-tree
+          v-else
           :data="category"
           :props="defaultProps"
           class="tree"
@@ -32,8 +34,9 @@
 
 <script setup>
 import { ref } from "vue";
-import data from "@/assets/category.js";
-import { useRouter } from "vue-router";
+// import data from "@/assets/category.js";
+import { onBeforeRouteUpdate, useRouter } from "vue-router";
+import myAxios from "@/utils/httpRequest";
 
 const router = useRouter();
 
@@ -44,11 +47,23 @@ const handleNodeClick = (data) => {
     router.push({ name: "productList", query: input.value });
   }
 };
-const category = ref(data);
+const category = ref([]);
 
 const input = ref({
   keyword: "",
   catalog3Id: null,
+});
+const loadData = () => {
+  myAxios.get("/product/category/list/tree").then(
+    (res) => {
+      category.value = res.data;
+    },
+    () => {}
+  );
+};
+loadData();
+onBeforeRouteUpdate(() => {
+  loadData();
 });
 
 const defaultProps = {
@@ -86,7 +101,7 @@ const onSearch = () => {
 
 .el-aside {
   flex-grow: 1;
-  width: auto;
+  width: 250px;
 }
 
 .el-main {
