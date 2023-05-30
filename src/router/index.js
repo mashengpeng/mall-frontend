@@ -56,7 +56,7 @@ const page = [
     meta: { title: "支付" },
   },
   {
-    path: "productDetail",
+    path: "productDetail/:skuId",
     name: "productDetail",
     component: () => import("@/views/ProductDetailView.vue"),
     meta: { title: "商品详情" },

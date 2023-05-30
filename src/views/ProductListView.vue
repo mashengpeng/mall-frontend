@@ -42,7 +42,7 @@
             class="image"
           />
 
-          <el-link :underline="false" @click="productOnClick">
+          <el-link :underline="false" @click="productOnClick(product)">
             <div v-html="product.skuTitle"></div>
           </el-link>
           <div class="price">{{ "¥ " + product.skuPrice }}</div>
@@ -100,8 +100,10 @@ const pageChange = (num) => {
   });
 };
 
-const productOnClick = (e) => {
-  console.log(e);
+const productOnClick = (item) => {
+  router.push({
+    path: `/productDetail/${item.skuId}`,
+  });
 };
 
 onBeforeRouteUpdate((to, from) => {
