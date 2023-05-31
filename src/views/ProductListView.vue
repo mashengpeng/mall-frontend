@@ -98,7 +98,7 @@ const pageChange = (num) => {
   console.log(route.fullPath, num, params.value);
 
   router.push({
-    name: "list",
+    name: "productList",
     //需要"深拷贝",不然认对象地址一样
     query: { ...params.value },
   });

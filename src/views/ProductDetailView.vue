@@ -21,12 +21,14 @@
         :key="attr.attrId"
         :label="'选择' + attr.attrName"
       >
-        <el-radio-group v-model="form[`attrId${attr.attrId}`]">
+        <el-radio-group
+          v-model="form[`attrId${attr.attrId}`]"
+          @change="attrSelect(attr, $event)"
+        >
           <el-radio-button
             v-for="(item, index) in attr.attrValues"
             :key="index"
             :label="item.attrValue"
-            @click="attrSelect(attr, item.attrValue)"
           ></el-radio-button>
         </el-radio-group>
       </el-form-item>
@@ -55,12 +57,12 @@ const route = useRoute();
 const data = ref(null);
 const form = ref({ number: 1 });
 const addCart = () => {
-  console.log(form);
+  // console.log(form);
 };
-const attrSelect = (a, b) => {
-  console.log(`attrId${a.attrId}`, b);
-  form.value[`attrId${a.attrId}`] = b;
-  console.log(form.value);
+const attrSelect = () => {
+  // console.log(`attrId${a.attrId}`, b);
+  // form.value[`attrId${a.attrId}`] = b;
+  // console.log(form.value);
   let setList = [];
   //console.log(form);
   for (let attr of data.value.saleAttr) {
@@ -80,7 +82,7 @@ const attrSelect = (a, b) => {
   const set = setList.reduce((acc, set) => {
     return new Set([...acc].filter((x) => set.has(x)));
   });
-  //console.log(`/productDetail/${set.values().next().value}`);
+  console.log(`跳转页面:/productDetail/${set.values().next().value}`);
   router.push({
     path: `/productDetail/${set.values().next().value}`,
   });
@@ -88,11 +90,11 @@ const attrSelect = (a, b) => {
 
 addCart();
 
-const loadData = () => {
-  //data.value = null;
-  form.value = { number: 1 };
-  //console.log(`/product/${route.params.skuId}`);
-  myAxios.post(`/product/${route.params.skuId}`).then(
+const loadData = (skuId) => {
+  // data.value = null;
+  // form.value = { number: 1 };
+  // console.log(`请求/product/${route.params.skuId}`);
+  myAxios.post(`/product/${skuId}`).then(
     (res) => {
       data.value = res.data;
       for (let attr of res.data.saleAttr) {
@@ -117,12 +119,12 @@ const loadData = () => {
     () => {}
   );
 };
-loadData();
+loadData(route.params.skuId);
 onBeforeRouteUpdate((to, from) => {
   if (to.fullPath === from.fullPath) {
     return;
   }
-  loadData();
+  loadData(to.params.skuId);
 });
 </script>
 

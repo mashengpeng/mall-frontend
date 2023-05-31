@@ -35,14 +35,14 @@ const state = reactive({
 
 const { circleUrl } = toRefs(state);
 const userInfo = ref(null);
-console.log(cookies.keys());
+// console.log(cookies.keys());
 const loginOut = () => {
   sessionStorage.removeItem("userInfo");
   cookies.set("MALLSESSION", "");
 };
 onBeforeRouteUpdate(() => {
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
-  console.log(userInfo);
+  // console.log(userInfo);
 });
 </script>
 

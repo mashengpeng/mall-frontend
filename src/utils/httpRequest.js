@@ -10,11 +10,11 @@ const instance = axios.create({
 // 添加响应拦截器
 instance.interceptors.response.use(
   function (response) {
-    console.log("httpRequest ", response.data);
+    console.log("axios response: ", response.data);
     return response.data;
   },
   function (error) {
-    console.log("httpRequest ", error);
+    console.log("axios response: ", error);
     ElMessage.error({
       message: error,
     });
