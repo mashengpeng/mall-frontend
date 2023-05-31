@@ -57,7 +57,19 @@ const route = useRoute();
 const data = ref(null);
 const form = ref({ number: 1 });
 const addCart = () => {
-  // console.log(form);
+  myAxios
+    .get(`/cart/addCartItem/`, {
+      params: {
+        num: form.value.number,
+        skuId: route.params.skuId,
+      },
+    })
+    .then(
+      (res) => {
+        console.log(res);
+      },
+      () => {}
+    );
 };
 const attrSelect = () => {
   // console.log(`attrId${a.attrId}`, b);
@@ -82,13 +94,11 @@ const attrSelect = () => {
   const set = setList.reduce((acc, set) => {
     return new Set([...acc].filter((x) => set.has(x)));
   });
-  console.log(`跳转页面:/productDetail/${set.values().next().value}`);
+  //console.log(`跳转页面:/productDetail/${set.values().next().value}`);
   router.push({
     path: `/productDetail/${set.values().next().value}`,
   });
 };
-
-addCart();
 
 const loadData = (skuId) => {
   // data.value = null;

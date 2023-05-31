@@ -25,6 +25,7 @@
 import { reactive, ref, toRefs } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 import { useCookies } from "vue3-cookies";
+import myAxios from "@/utils/httpRequest";
 
 const { cookies } = useCookies();
 
@@ -37,8 +38,12 @@ const { circleUrl } = toRefs(state);
 const userInfo = ref(null);
 // console.log(cookies.keys());
 const loginOut = () => {
-  sessionStorage.removeItem("userInfo");
+  //sessionStorage.removeItem("userInfo");
   cookies.set("MALLSESSION", "");
+  myAxios.post("/auth/logOut").then(
+    () => {},
+    () => {}
+  );
 };
 onBeforeRouteUpdate(() => {
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
