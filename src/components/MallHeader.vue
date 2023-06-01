@@ -8,10 +8,11 @@
     <el-menu-item index="/">首页</el-menu-item>
     <div class="flex-grow" />
     <el-menu-item v-if="!userInfo" index="/login">登录</el-menu-item>
-    <el-sub-menu v-else>
+    <el-sub-menu>
       <template #title>
-        <el-avatar :size="30" :src="circleUrl" />
-        &nbsp;&nbsp;&nbsp;{{ userInfo.username }}
+        <el-avatar :size="30" :src="circleUrl" />&nbsp;&nbsp;&nbsp;&nbsp;
+        <span v-if="userInfo?.username">{{ userInfo.username }}</span>
+        <span v-else>访客</span>
       </template>
 
       <el-menu-item index="/orderList">我的订单</el-menu-item>
@@ -38,13 +39,14 @@ const { circleUrl } = toRefs(state);
 const userInfo = ref(null);
 // console.log(cookies.keys());
 const loginOut = () => {
-  //sessionStorage.removeItem("userInfo");
+  sessionStorage.removeItem("userInfo");
   cookies.set("MALLSESSION", "");
   myAxios.post("/auth/logOut").then(
     () => {},
     () => {}
   );
 };
+userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
 onBeforeRouteUpdate(() => {
   userInfo.value = JSON.parse(sessionStorage.getItem("userInfo"));
   // console.log(userInfo);

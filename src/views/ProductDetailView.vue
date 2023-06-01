@@ -52,6 +52,7 @@ import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import myAxios from "@/utils/httpRequest";
 import { ref } from "vue";
 import router from "@/router";
+import { ElNotification } from "element-plus";
 
 const route = useRoute();
 const data = ref(null);
@@ -65,8 +66,12 @@ const addCart = () => {
       },
     })
     .then(
-      (res) => {
-        console.log(res);
+      () => {
+        ElNotification({
+          title: "添加购物车成功",
+          message: `${form.value.number}个${data.value.info.skuTitle}`,
+          type: "success",
+        });
       },
       () => {}
     );
