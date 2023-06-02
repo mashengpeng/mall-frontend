@@ -20,7 +20,7 @@
           placeholder="搜索你想要的商品吧"
         />
         <el-button class="button" type="primary" @click="onSearch"
-          >搜索
+          >{{ input.keyword === "" ? "随便逛逛" : "搜索" }}
         </el-button>
       </div>
       <el-carousel :interval="4000" height="400px" type="card">
@@ -101,11 +101,12 @@ const onSearch = () => {
 
 .el-aside {
   flex-grow: 1;
-  width: 250px;
+  width: 0;
 }
 
 .el-main {
-  flex-grow: 10;
+  flex-grow: 3;
+  width: 0;
 }
 
 .search {

@@ -1,32 +1,1 @@
-<template>
-  <el-skeleton v-if="!isReady" />
-  <div v-else class="base">
-    <el-empty v-if="!data" description="空空如也" />
-    <div v-else>{{ data }}</div>
-  </div>
-</template>
-
-<script setup>
-import { ref } from "vue";
-import myAxios from "@/utils/httpRequest";
-
-let isReady = ref(false);
-
-const data = ref(null);
-const loadData = () => {
-  isReady = false;
-  myAxios.post("/cart/list").then(
-    (res) => {
-      console.log(res);
-      data.value = res.data;
-    },
-    () => {}
-  );
-
-  isReady = true;
-};
-
-loadData();
-</script>
-
-<style scoped></style>
+<template>  <el-skeleton v-if="!isReady" />  <div v-else class="base">    <el-empty v-if="!data" description="空空如也" />    <div v-else>      <el-space :fill="true" :size="30">        <el-card v-for="item in data.items" :key="item.skuId">          <template #header>            <div class="title">              <el-link                :underline="false"                @click="router.push(`/productDetail/${item.skuId}`)"                >{{ item.title }}              </el-link>              <span v-if="stockInfo(item.skuId) > 0" style="color: #67c23a"                >库存:{{ stockInfo(item.skuId) }}</span              >              <span v-else style="color: #f56c6c">缺货</span>            </div>          </template>          <div class="content">            <el-image              :preview-src-list="[item.image]"              :src="item.image"            ></el-image>            <el-descriptions :column="10" border direction="vertical">              <el-descriptions-item align="center" label="价格"                >{{ item.price }}              </el-descriptions-item>              <el-descriptions-item align="center" label="数量">                {{ item.count }}              </el-descriptions-item>              <el-descriptions-item align="center" label="总价格"                >{{ item.totalPrice }}              </el-descriptions-item>              <el-descriptions-item                v-for="(attr, index) in item.skuAttrValues"                :key="index"                :label="attr.split('：')[0]"                align="center"                >{{ attr.split("：")[1] }}              </el-descriptions-item>            </el-descriptions>          </div>        </el-card>      </el-space>      <el-divider></el-divider>      <el-descriptions border direction="vertical" title="收货地址">        <template #extra>          <el-button size="large" type="primary" @click="drawer = true"            >更换地址          </el-button>        </template>        <el-descriptions-item label="收件人"          >{{ currentAddress.name }}        </el-descriptions-item>        <el-descriptions-item label="手机号"          >{{ currentAddress.phone }}        </el-descriptions-item>        <el-descriptions-item label="邮编">          {{ currentAddress.postCode }}        </el-descriptions-item>        <el-descriptions-item label="详细地址"          >{{ detailAddress(currentAddress) }}        </el-descriptions-item>      </el-descriptions>      <el-divider></el-divider>      <el-descriptions :column="3" border title="支付信息">        <template #extra>          <el-button            size="large"            type="primary"            @click="router.push(`/orderConfirm`)"            >提交订单          </el-button>        </template>        <el-descriptions-item>          <template #label> 商品总价</template>          {{ data.total + " 元" }}        </el-descriptions-item>        <el-descriptions-item>          <template #label> 商品种数</template>          {{ data.count }}        </el-descriptions-item>        <el-descriptions-item>          <template #label> 应付金额</template>          {{ data.total + " 元" }}        </el-descriptions-item>      </el-descriptions>      <el-backtop target=".el-main"></el-backtop>      <el-drawer        v-model="drawer"        :before-close="handleClose"        destroy-on-close        direction="ltr"        size="600"        title="选择地址"      >        <el-space fill="true">          <el-descriptions            v-for="(address, index) in data.memberAddressVos"            :key="index"            border            direction="vertical"            title="收货地址"          >            <template #extra>              <el-button                size="large"                type="primary"                @click="changeAddress(index)"                >选择              </el-button>            </template>            <el-descriptions-item label="收件人"              >{{ address.name }}            </el-descriptions-item>            <el-descriptions-item label="手机号"              >{{ address.phone }}            </el-descriptions-item>            <el-descriptions-item label="邮编">              {{ address.postCode }}            </el-descriptions-item>            <el-descriptions-item label="详细地址"              >{{ detailAddress(address) }}            </el-descriptions-item>          </el-descriptions>        </el-space>      </el-drawer>    </div>  </div></template><script setup>import { computed, ref } from "vue";import myAxios from "@/utils/httpRequest";import { ElNotification } from "element-plus";import router from "@/router";let isReady = ref(false);const data = ref(null);const form = ref({ addressId: 1 });const drawer = ref(false);const changeAddress = (index) => {  form.value.addressId = index;  drawer.value = false;  ElNotification({    title: "更换地址成功",    type: "success",    position: "top-left",  });};const stockInfo = (skuId) => {  return data.value.stocks[skuId];};const currentAddress = computed(() => {  return data.value.memberAddressVos[form.value.addressId];});const detailAddress = (address) => {  return `${address.province}省${address.city}市${address.region}区/镇${    address.detailAddress ? address.detailAddress : ""  }`;};const loadData = () => {  isReady = false;  myAxios.post("/order/confirm").then(    (res) => {      console.log(res);      data.value = res.data;    },    () => {}  );  isReady = true;};loadData();</script><style scoped>.content {  display: flex;  justify-content: space-around;  align-items: center;}.title {  display: flex;  justify-content: space-between;}.el-image {  width: 150px;  height: 150px;}</style>

@@ -10,7 +10,13 @@
         <el-card v-for="item in data.items" :key="item.skuId">
           <template #header>
             <div class="title">
-              <el-link :underline="false" @click="toDetail(item.skuId)"
+              <el-link
+                :underline="false"
+                @click="
+                  router.push({
+                    path: `/productDetail/${item.skuId}`,
+                  })
+                "
                 >{{ item.title }}
               </el-link>
               <el-checkbox
@@ -56,7 +62,12 @@
       <el-divider></el-divider>
       <el-descriptions :column="2" border title="总览">
         <template #extra>
-          <el-button size="large" type="primary">结算</el-button>
+          <el-button
+            size="large"
+            type="primary"
+            @click="router.push(`/orderConfirm`)"
+            >结算
+          </el-button>
         </template>
         <el-descriptions-item>
           <template #label> 商品总数</template>
@@ -89,12 +100,6 @@ import { ElNotification } from "element-plus";
 let isReady = ref(false);
 
 const data = ref(null);
-
-const toDetail = (skuId) => {
-  router.push({
-    path: `/productDetail/${skuId}`,
-  });
-};
 
 const check = (skuId, checked) => {
   myAxios
